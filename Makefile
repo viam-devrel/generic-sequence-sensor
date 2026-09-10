@@ -1,11 +1,11 @@
 
 GO_BUILD_ENV :=
-GO_BUILD_FLAGS :=
+GO_BUILD_FLAGS := -ldflags="-s -w"
 MODULE_BINARY := bin/generic-sequence-sensor
 
 ifeq ($(VIAM_TARGET_OS), windows)
 	GO_BUILD_ENV += GOOS=windows GOARCH=amd64
-	GO_BUILD_FLAGS := -tags no_cgo
+	GO_BUILD_FLAGS += -tags no_cgo
 	MODULE_BINARY = bin/generic-sequence-sensor.exe
 endif
 
@@ -26,9 +26,6 @@ TAR_FILES += $(FIRST_RUN)
 endif
 
 module.tar.gz: meta.json $(MODULE_BINARY)
-ifneq ($(VIAM_TARGET_OS), windows)
-	strip $(MODULE_BINARY)
-endif
 	tar czf $@ $(TAR_FILES)
 
 module: test module.tar.gz
