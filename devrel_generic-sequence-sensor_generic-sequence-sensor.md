@@ -36,7 +36,7 @@ Each entry in `resources`:
 | Name              | Type     | Inclusion | Description                                                                   |
 | ----------------- | -------- | --------- | ----------------------------------------------------------------------------- |
 | `resource_name`   | string   | Required  | Name of the resource involved in this step.                                   |
-| `method`          | string   | Required  | Method to associate. Must be `Readings`, `GetImages`, or `JointPositions`.    |
+| `method`          | string   | Required  | Data-capture method to override. One of `Readings`, `GetImages`, `JointPositions`, `EndPosition`, `DoCommand`. |
 | `sequence_cap_hz` | float    | Optional  | Capture frequency (Hz) to apply when the sequence is active. Defaults to `0`. |
 | `tags`            | []string | Optional  | Data-capture tags to include in overrides for this resource.                  |
 
@@ -58,12 +58,19 @@ Each entry in `resources`:
           "method": "JointPositions",
           "sequence_cap_hz": 5,
           "tags": ["bar"]
+        },
+        {
+          "resource_name": "gripper-1",
+          "method": "DoCommand",
+          "sequence_cap_hz": 5
         }
       ]
     }
   ]
 }
 ```
+
+`DoCommand` captures whatever payload the resource's own data-capture config sends, which is the usual way to record gripper state.
 
 ## Readings
 

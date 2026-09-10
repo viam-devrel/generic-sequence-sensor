@@ -12,6 +12,8 @@ func TestStartStop(t *testing.T) {
 	ctx := context.Background()
 	cfg := &Config{Sequences: []SequenceConfig{{Resources: []ResourceConfig{
 		{ResourceName: "cam", Method: "GetImages", SequenceCapHz: 10, Tags: []string{"foo"}},
+		{ResourceName: "arm", Method: "EndPosition"},
+		{ResourceName: "gripper", Method: "DoCommand"},
 	}}}}
 	if _, _, err := cfg.Validate("test"); err != nil {
 		t.Fatal(err)

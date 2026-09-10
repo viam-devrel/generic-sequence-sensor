@@ -3,6 +3,8 @@ package genericsequencesensor
 import (
 	"context"
 	"fmt"
+	"slices"
+	"strings"
 	"sync"
 
 	sensor "go.viam.com/rdk/components/sensor"
@@ -13,11 +15,8 @@ import (
 var (
 	GenericSequenceSensor = resource.NewModel("devrel", "generic-sequence-sensor", "generic-sequence-sensor")
 
-	validMethods = map[string]bool{
-		"Readings":       true,
-		"GetImages":      true,
-		"JointPositions": true,
-	}
+	// Data-capture method names as the RDK spells them (see components/*/collectors.go).
+	validMethods = []string{"Readings", "GetImages", "JointPositions", "EndPosition", "DoCommand"}
 )
 
 func init() {
@@ -49,8 +48,8 @@ func (cfg *Config) Validate(path string) ([]string, []string, error) {
 			if res.ResourceName == "" {
 				return nil, nil, fmt.Errorf("%s.sequences[%d].resources[%d]: resource_name must not be empty", path, i, j)
 			}
-			if !validMethods[res.Method] {
-				return nil, nil, fmt.Errorf("%s.sequences[%d].resources[%d]: method %q must be one of Readings, GetImages, JointPositions", path, i, j, res.Method)
+			if !slices.Contains(validMethods, res.Method) {
+				return nil, nil, fmt.Errorf("%s.sequences[%d].resources[%d]: method %q must be one of %s", path, i, j, res.Method, strings.Join(validMethods, ", "))
 			}
 		}
 	}
