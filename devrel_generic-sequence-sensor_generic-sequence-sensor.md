@@ -103,6 +103,14 @@ When no sequence is active (stopped, or before any sequence has been started), r
 {"active": false}
 ```
 
+## Status
+
+Reports the sensor's own state, not its readings. Available via the standard `GetStatus` RPC on any resource.
+
+```json
+{"active": true, "sequence_tag": "my-tag"}
+```
+
 ## DoCommand
 
 ### `start`

@@ -53,3 +53,13 @@ func TestStartStop(t *testing.T) {
 		t.Fatal("expected unknown command error")
 	}
 }
+
+func TestStatusOverridesEmbeddedNamed(t *testing.T) {
+	s := &genericSequenceSensor{Named: resource.NewName(resource.APINamespaceRDK.WithComponentType("sensor"), "s").AsNamed(), cfg: &Config{}}
+	var r resource.Resource = s
+	s.sequenceActive, s.sequenceTag = true, "x"
+	st, err := r.Status(context.Background())
+	if err != nil || st["sequence_tag"] != "x" {
+		t.Fatalf("resource.Resource.Status = %v, %v; embedded Named default was not overridden", st, err)
+	}
+}
