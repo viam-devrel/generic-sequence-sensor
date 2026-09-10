@@ -1,9 +1,9 @@
 {
   "$schema": "https://dl.viam.dev/module.schema.json",
-  "module_id": "mattmacf:generic-sequence-sensor",
+  "module_id": "devrel:generic-sequence-sensor",
   "visibility": "public",
-  "url": "https://github.com/mattmacf98/generic-sequence-sensor",
-  "description": "Modular sensor component: generic-sequence-sensor",
+  "url": "https://github.com/viam-devrel/generic-sequence-sensor",
+  "description": "Sensor component to serve as a capture sensor for recording sequences",
   "applications": null,
   "markdown_link": "README.md",
   "entrypoint": "bin/generic-sequence-sensor",
