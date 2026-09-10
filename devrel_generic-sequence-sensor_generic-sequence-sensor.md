@@ -70,7 +70,34 @@ Each entry in `resources`:
 }
 ```
 
-`DoCommand` captures whatever payload the resource's own data-capture config sends, which is the usual way to record gripper state.
+### Using `DoCommand` as a capture method
+
+`DoCommand` is the usual way to record state from resources like grippers that expose it only through `DoCommand`. Unlike the other methods, it cannot be enabled by this sensor's override alone. The RDK's DoCommand collector reads its payload from a `docommand_input` key in the capture method's `additional_params`, so the target resource must have a static data capture entry that supplies it. Set `capture_frequency_hz` to `0` there so the collector stays off until a sequence starts.
+
+```json
+{
+  "name": "gripper-1",
+  "api": "rdk:component:gripper",
+  "service_configs": [
+    {
+      "type": "data_manager",
+      "attributes": {
+        "capture_methods": [
+          {
+            "method": "DoCommand",
+            "capture_frequency_hz": 0,
+            "additional_params": {
+              "docommand_input": { "command": "get_state" }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+When the sequence starts, this sensor's override supplies the frequency and tags, and the collector sends `docommand_input` to the resource on every tick and records the response.
 
 ## Readings
 
