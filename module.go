@@ -104,11 +104,16 @@ func (s *genericSequenceSensor) Readings(ctx context.Context, extra map[string]i
 				"resource_name": res.ResourceName,
 				"method":        res.Method,
 			}
+			// structpb only accepts []interface{}, not []string.
+			resTags := make([]interface{}, len(res.Tags))
+			for k, t := range res.Tags {
+				resTags[k] = t
+			}
 			overrides = append(overrides, map[string]interface{}{
 				"resource_name":        res.ResourceName,
 				"method":               res.Method,
 				"capture_frequency_hz": res.SequenceCapHz,
-				"tags":                 res.Tags,
+				"tags":                 resTags,
 			})
 		}
 		sequences[i] = map[string]interface{}{

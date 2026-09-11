@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"go.viam.com/rdk/logging"
+	"go.viam.com/rdk/protoutils"
 	"go.viam.com/rdk/resource"
 )
 
@@ -39,6 +40,10 @@ func TestStartStop(t *testing.T) {
 	ov := r["overrides"].([]interface{})[0].(map[string]interface{})
 	if ov["capture_frequency_hz"] != 10.0 {
 		t.Fatalf("override = %v", ov)
+	}
+	// The gRPC server converts readings to structpb; raw []string is not convertible.
+	if _, err := protoutils.ReadingGoToProto(r); err != nil {
+		t.Fatalf("active readings not proto-convertible: %v", err)
 	}
 	st, _ := s.Status(ctx)
 	if st["active"] != true || st["sequence_tag"] != "run1" {
